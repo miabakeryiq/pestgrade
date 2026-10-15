@@ -4,12 +4,687 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OestGrade Demo</title>
+    <title>PestGrade Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <style>
+        :root {
+            --navy: #0c3a7d;
+            --navy-d: #082a5c;
+            --orange: #f26b21;
+            --ink: #14233f;
+            --mute: #5a6b85;
+            --line: #d5dce9;
+            --bg: #edf1f7;
+            --card: #fff;
+            --ok: #1f7a4d;
+            --warn: #a86a0a;
+            --bad: #b3261e;
+            --r: 10px
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 16px/1.5 Montserrat, "Segoe UI", Arial, sans-serif
+        }
+
+        a {
+            color: var(--navy)
+        }
+
+        header {
+            background: var(--navy);
+            color: #fff;
+            border-bottom: 4px solid var(--orange)
+        }
+
+        header div {
+            max-width: 1080px;
+            margin: auto;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        header b {
+            font-size: 20px;
+            font-weight: 800
+        }
+
+        header span {
+            font-size: 14px;
+            opacity: .85
+        }
+
+        main {
+            max-width: 1080px;
+            margin: auto;
+            padding: 24px 20px 48px
+        }
+
+        h1 {
+            font-size: 26px;
+            margin: 0 0 4px;
+            font-weight: 800
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 12px;
+            font-weight: 700
+        }
+
+        .sub {
+            color: var(--mute);
+            margin: 0 0 22px;
+            max-width: 62ch
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 24px;
+            align-items: start
+        }
+
+        @media(max-width:860px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            padding: 22px
+        }
+
+        .card+.card {
+            margin-top: 24px
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 16px 0 6px
+        }
+
+        label:first-of-type {
+            margin-top: 0
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            font: inherit;
+            padding: 10px 12px;
+            border: 1px solid #b9c4d8;
+            border-radius: 8px;
+            background: #fff;
+            color: var(--ink)
+        }
+
+        textarea {
+            min-height: 92px;
+            resize: vertical
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--orange);
+            outline-offset: 2px
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--mute);
+            margin: 6px 0 0
+        }
+
+        .gdesc {
+            margin-top: 8px;
+            padding: 10px 12px;
+            border-left: 4px solid var(--navy);
+            background: #f3f6fb;
+            font-size: 14px;
+            border-radius: 0 8px 8px 0
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        @media(max-width:520px) {
+            .row {
+                grid-template-columns: 1fr
+            }
+        }
+
+        button,
+        .btn {
+            font: inherit;
+            font-weight: 700;
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 18px;
+            cursor: pointer;
+            background: var(--navy);
+            color: #fff;
+            text-decoration: none;
+            display: inline-block
+        }
+
+        button:hover,
+        .btn:hover {
+            background: var(--navy-d)
+        }
+
+        .primary {
+            background: var(--orange);
+            color: #14233f;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 17px
+        }
+
+        .primary:hover {
+            background: #e05d14
+        }
+
+        .ghost {
+            background: #fff;
+            color: var(--navy);
+            border: 1px solid var(--navy)
+        }
+
+        .ghost:hover {
+            background: #eaf0fa
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px
+        }
+
+        .badge {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto
+        }
+
+        .cap {
+            text-align: center;
+            color: var(--mute);
+            font-size: 13px;
+            margin: 10px auto 0;
+            max-width: 40ch
+        }
+
+        .linkbox {
+            font-size: 12px;
+            word-break: break-all;
+            background: #f3f6fb;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-top: 14px;
+            max-height: 64px;
+            overflow: auto;
+            color: var(--mute)
+        }
+
+        .note {
+            font-size: 13px;
+            color: var(--warn);
+            margin-top: 10px
+        }
+
+        .saved {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+
+        .saved li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid var(--line)
+        }
+
+        .saved li:first-child {
+            border-top: 0
+        }
+
+        .saved small {
+            color: var(--mute);
+            display: block
+        }
+
+        .saved button {
+            padding: 7px 12px;
+            font-size: 14px
+        }
+
+        .chip {
+            display: inline-block;
+            min-width: 38px;
+            text-align: center;
+            padding: 2px 10px;
+            border-radius: 99px;
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px
+        }
+
+        .ok {
+            background: var(--ok)
+        }
+
+        .warn {
+            background: var(--warn)
+        }
+
+        .bad {
+            background: var(--bad)
+        }
+
+        .status {
+            border-radius: var(--r);
+            padding: 16px 20px;
+            color: #fff;
+            margin-bottom: 24px
+        }
+
+        .status b {
+            font-size: 22px;
+            display: block
+        }
+
+        .status.ok {
+            background: var(--ok)
+        }
+
+        .status.warn {
+            background: var(--warn)
+        }
+
+        .status.bad {
+            background: var(--bad)
+        }
+
+        dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px
+        }
+
+        dt {
+            color: var(--mute);
+            font-size: 14px
+        }
+
+        dd {
+            margin: 0;
+            font-weight: 600;
+            word-break: break-word
+        }
+
+        .tl {
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 22px;
+            border-left: 3px solid var(--line)
+        }
+
+        .tl li {
+            position: relative;
+            padding: 0 0 22px 14px
+        }
+
+        .tl li:last-child {
+            padding-bottom: 0
+        }
+
+        .dot {
+            position: absolute;
+            left: -31px;
+            top: 4px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 3px solid #fff
+        }
+
+        .tl-head {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .tl p {
+            margin: 6px 0 0;
+            max-width: 62ch
+        }
+
+        .tl small {
+            color: var(--mute)
+        }
+
+        footer {
+            max-width: 1080px;
+            margin: auto;
+            padding: 0 20px 32px;
+            color: var(--mute);
+            font-size: 13px
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Welcome to Pest Grade</h1>
-    <p>This is a PestGrade Demo</p>
+    <header>
+        <div><b>PestGrade</b><span>Demo only. Not an official certification.</span></div>
+    </header>
+    <main id="app"></main>
+    <footer>PestGrade is a demo. Records live in this browser, and a badge's QR code carries its own data so it can be
+        scanned on any device without a server.</footer>
+
+    <script>
+        /* ---------- config ---------- */
+        const VALID_DAYS = 365;      // demo assumption: a grade is "current" for 12 months
+        const MAX_URL = 1200;        // keeps the QR code scannable; oldest inspections drop off the QR first
+        const GRADES = {
+            'A+': {
+                name: 'Excellent', head: 'CERTIFIED', tag: 'Excellent Pest Management Standards', tone: 'ok',
+                desc: 'Exceeds standards. No pest activity, entry points sealed, records complete.'
+            },
+            'A': {
+                name: 'Strong', head: 'CERTIFIED', tag: 'Strong Pest Management Standards', tone: 'ok',
+                desc: 'Meets all standards. No active infestation; only minor preventive recommendations.'
+            },
+            'B': {
+                name: 'Acceptable', head: 'CERTIFIED', tag: 'Acceptable Pest Management Standards', tone: 'ok',
+                desc: 'Acceptable. Minor conditions found and corrected or scheduled for correction.'
+            },
+            'C': {
+                name: 'Needs improvement', head: 'CONDITIONAL', tag: 'Improvement Needed, Follow-up Due', tone: 'warn',
+                desc: 'Active pest activity or conditions that invite pests. Follow-up inspection required.'
+            },
+            'D': {
+                name: 'Significant deficiencies', head: 'NOT CERTIFIED', tag: 'Significant Deficiencies Found', tone: 'bad',
+                desc: 'Ongoing infestation or sanitation failures. Re-inspection required.'
+            },
+            'F': {
+                name: 'Failed', head: 'NOT CERTIFIED', tag: 'Failed Pest Management Inspection', tone: 'bad',
+                desc: 'Serious infestation or public-health risk. Immediate corrective action required.'
+            }
+        };
+        const $ = (s, r = document) => r.querySelector(s);
+        const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const today = () => new Date().toLocaleDateString('en-CA');
+        const parseD = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+        const fmtD = s => parseD(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const fmtPhone = p => { const d = String(p).replace(/\D/g, ''); return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : p; };
+
+        /* ---------- storage (this browser only) ---------- */
+        const KEY = 'pestgrade.v1';
+        const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+        const save = db => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch { } };
+        function newId(db) {
+            const used = new Set(Object.values(db).map(r => r.id));
+            let id; do { id = `PMG-${new Date().getFullYear()}-${String(1 + Math.floor(Math.random() * 99999)).padStart(5, '0')}`; } while (used.has(id));
+            return id;
+        }
+
+        /* ---------- compact payload for the QR link ---------- */
+        const b64u = b => btoa(String.fromCharCode(...b)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        const unb64u = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+        async function pack(obj) {
+            let bytes = new TextEncoder().encode(JSON.stringify(obj)), tag = 'r';
+            if ('CompressionStream' in window) {
+                const out = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+                bytes = new Uint8Array(await new Response(out).arrayBuffer()); tag = 'z';
+            }
+            return tag + b64u(bytes);
+        }
+        async function unpack(s) {
+            let bytes = unb64u(s.slice(1));
+            if (s[0] === 'z') {
+                const out = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+                bytes = new Uint8Array(await new Response(out).arrayBuffer());
+            }
+            return JSON.parse(new TextDecoder().decode(bytes));
+        }
+        async function buildLink(r) {
+            const base = location.href.split('#')[0];
+            let k = 0, url;
+            for (; ;) {
+                const o = { i: r.id, l: r.license, n: r.name, p: r.phone, t: k, h: r.h.slice(k).map(x => [x.d, x.g, x.j]) };
+                url = base + '#/v/' + await pack(o);
+                if (url.length <= MAX_URL || k >= r.h.length - 1) break;
+                k++;
+            }
+            return { url, trimmed: k };
+        }
+        function makeQR(text) {
+            try { const q = qrcode(0, 'L'); q.addData(text); q.make(); return q; } catch { return null; }
+        }
+
+        /* ---------- the badge (SVG, matches the reference design) ---------- */
+        function star(ro, ri, n = 24) {
+            let p = '';
+            for (let i = 0; i < n * 2; i++) {
+                const a = Math.PI * i / n - Math.PI / 2, r = i % 2 ? ri : ro;
+                p += `${i ? 'L' : 'M'}${(500 + r * Math.cos(a)).toFixed(1)} ${(500 + r * Math.sin(a)).toFixed(1)}`;
+            }
+            return p + 'Z';
+        }
+        function badgeSVG(grade, id, qr) {
+            const g = GRADES[grade];
+            let mods = '';
+            if (qr) {
+                const n = qr.getModuleCount(), s = 162 / n;
+                for (let r = 0; r < n; r++) for (let c = 0; c < n; c++)
+                    if (qr.isDark(r, c)) mods += `M${(300 + c * s).toFixed(2)} ${(558 + r * s).toFixed(2)}h${s.toFixed(2)}v${s.toFixed(2)}h-${s.toFixed(2)}z`;
+            }
+            const big = grade.length > 1 ? 250 : 290;
+            return `<svg class="badge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="Pest management grade ${esc(grade)}, certification ID ${esc(id)}" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#fff" text-anchor="middle">
+<path d="${star(498, 448)}" fill="#0c3a7d" stroke="#0c3a7d" stroke-width="8" stroke-linejoin="round"/>
+<path d="${star(468, 420)}" fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+<text x="500" y="225" font-size="${g.head.length > 11 ? 60 : 74}" font-weight="800">${g.head}</text>
+<text x="500" y="278" font-size="36">Pest Management Grade</text>
+<path d="M404 322l19 7 19-7v20c0 12-8 21-19 26-11-5-19-14-19-26z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+<path d="M413 345l7 7 12-13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+<text x="520" y="468" font-size="${big}" font-weight="800" fill="#f26b21" letter-spacing="-8">${esc(grade)}</text>
+<text x="500" y="522" font-size="${g.tag.length > 36 ? 30 : 34}">${esc(g.tag)}</text>
+<rect x="290" y="548" width="182" height="182" fill="#fff"/>
+${qr ? `<path d="${mods}" fill="#000" shape-rendering="crispEdges"/>` : `<text x="381" y="650" font-size="26" fill="#8a97ad">QR on issue</text>`}
+<text x="520" y="612" font-size="28" text-anchor="start">View</text>
+<text x="520" y="648" font-size="28" text-anchor="start">Certification</text>
+<text x="520" y="684" font-size="28" text-anchor="start">Status</text>
+<text x="500" y="765" font-size="23">Certification ID: ${esc(id)}</text>
+<text x="500" y="822" font-size="28">Inspected By</text>
+<text x="500" y="866" font-size="34" font-weight="800">TRIPLE <tspan fill="#f26b21">E</tspan></text>
+</svg>`;
+        }
+
+        /* ---------- issue view (pest tech) ---------- */
+        let current = null; // {svg, url}
+        function renderIssue() {
+            $('#app').innerHTML = `
+  <h1>Issue a pest management badge</h1>
+  <p class="sub">Enter the inspection details. The badge gets a certification ID and a QR code the health inspector can scan to see the grade and inspection history.</p>
+  <div class="grid">
+    <div>
+      <form class="card" id="f" autocomplete="off">
+        <label for="grade">Grade</label>
+        <select id="grade" name="grade" required>
+          ${Object.entries(GRADES).map(([k, v]) => `<option value="${esc(k)}">${esc(k)} - ${esc(v.name)}</option>`).join('')}
+        </select>
+        <div class="gdesc" id="gdesc" aria-live="polite"></div>
+        <label for="date">Inspection date</label>
+        <input id="date" name="date" type="date" required max="${today()}" value="${today()}">
+        <label for="job">Job description</label>
+        <textarea id="job" name="job" maxlength="280" required placeholder="Example: Quarterly service. Sealed gap at rear door, replaced rodent bait stations, no live activity found."></textarea>
+        <p class="hint"><span id="cnt">0</span>/280 characters. Shown on the inspection timeline.</p>
+        <div class="row">
+          <div><label for="license">Pest tech license #</label><input id="license" name="license" required placeholder="NJ-PC-48213"></div>
+          <div><label for="phone">Phone number</label><input id="phone" name="phone" type="tel" inputmode="tel" required minlength="10" placeholder="(973) 555-0142"></div>
+        </div>
+        <label for="name">Technician or business name</label>
+        <input id="name" name="name" required placeholder="Garden State Pest Control">
+        <p class="hint" id="existing" aria-live="polite"></p>
+        <button class="primary" type="submit">Issue badge</button>
+      </form>
+      <div class="card"><h2>Saved in this browser</h2><ul class="saved" id="saved"></ul>
+        <div class="actions"><button class="ghost" id="sample" type="button">Load sample badge</button><button class="ghost" id="clear" type="button">Clear all</button></div>
+      </div>
+    </div>
+    <div class="card" id="panel"></div>
+  </div>`;
+            const f = $('#f');
+            const updDesc = () => { const g = GRADES[f.grade.value]; $('#gdesc').textContent = g.desc; if (!current) preview(); };
+            f.grade.onchange = () => { current = null; updDesc(); };
+            f.job.oninput = () => $('#cnt').textContent = f.job.value.length;
+            f.license.onblur = () => {
+                const r = load()[f.license.value.trim().toUpperCase()];
+                if (!r) { $('#existing').textContent = ''; return; }
+                if (!f.name.value) f.name.value = r.name;
+                if (!f.phone.value) f.phone.value = r.phone;
+                $('#existing').textContent = `This license already has badge ${r.id}. The new inspection will be added to its timeline.`;
+            };
+            f.onsubmit = async e => {
+                e.preventDefault();
+                const lic = f.license.value.trim().toUpperCase(), db = load();
+                const r = db[lic] || { id: newId(db), license: lic, h: [] };
+                r.name = f.name.value.trim(); r.phone = f.phone.value.trim();
+                r.h.push({ d: f.date.value, g: f.grade.value, j: f.job.value.trim() });
+                r.h.sort((a, b) => a.d.localeCompare(b.d));
+                db[lic] = r; save(db);
+                f.job.value = ''; $('#cnt').textContent = '0'; $('#existing').textContent = '';
+                await showIssued(r); listSaved();
+            };
+            $('#sample').onclick = async () => {
+                const db = load(), r = db['NJ-PC-48213'] || { id: newId(db), license: 'NJ-PC-48213', h: [] };
+                const ago = n => { const d = new Date(); d.setDate(d.getDate() - n); return d.toLocaleDateString('en-CA'); };
+                r.name = 'Garden State Pest Control'; r.phone = '9735550142';
+                r.h = [
+                    { d: ago(300), g: 'B', j: 'Initial inspection. Droppings found behind dish machine; cleaned and baited. Door sweep on back entrance worn.' },
+                    { d: ago(190), g: 'C', j: 'Follow-up. Fruit flies in bar area and gap under walk-in cooler. Drain treatment applied; sealing scheduled.' },
+                    { d: ago(95), g: 'A', j: 'Gap sealed, drains cleared, bait stations replaced. No live activity. Recommend weekly drain flush.' },
+                    { d: ago(10), g: 'A+', j: 'Quarterly service. No activity in any monitored area. Exterior perimeter treated, logbook up to date.' }
+                ];
+                db['NJ-PC-48213'] = r; save(db); await showIssued(r); listSaved();
+            };
+            $('#clear').onclick = () => { if (confirm('Remove all badges saved in this browser?')) { save({}); current = null; listSaved(); preview(); } };
+            updDesc(); listSaved(); preview();
+        }
+        function preview() {
+            const g = $('#grade').value;
+            $('#panel').innerHTML = `<h2>Badge preview</h2>${badgeSVG(g, 'PMG-' + new Date().getFullYear() + '-XXXXX', null)}<p class="cap">The certification ID and QR code are generated when you issue the badge.</p>`;
+        }
+        function listSaved() {
+            const rs = Object.values(load());
+            $('#saved').innerHTML = rs.length ? rs.map(r => {
+                const last = r.h[r.h.length - 1];
+                return `<li><div><b>${esc(r.name)}</b><small>${esc(r.id)} &middot; ${r.h.length} inspection${r.h.length > 1 ? 's' : ''} &middot; latest ${esc(last.g)}</small></div><button type="button" data-l="${esc(r.license)}">View</button></li>`;
+            }).join('') : '<li><small>No badges yet. Fill in the form or load the sample.</small></li>';
+            $('#saved').querySelectorAll('button').forEach(b => b.onclick = () => showIssued(load()[b.dataset.l]));
+        }
+        async function showIssued(r) {
+            const last = r.h[r.h.length - 1], { url, trimmed } = await buildLink(r);
+            const svg = badgeSVG(last.g, r.id, makeQR(url));
+            current = { svg, url, id: r.id };
+            $('#panel').innerHTML = `<h2>${esc(r.name)}</h2>${svg}
+    <p class="cap">Badge ${esc(r.id)} with ${r.h.length} inspection${r.h.length > 1 ? 's' : ''}. Latest grade ${esc(last.g)} on ${fmtD(last.d)}.</p>
+    <div class="actions" style="justify-content:center">
+      <button id="dlpng" type="button">Download PNG</button><button class="ghost" id="dlsvg" type="button">Download SVG</button>
+      <a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener">Open inspector view</a>
+      <button class="ghost" id="copy" type="button">Copy link</button></div>
+    ${trimmed ? `<p class="note">The QR code holds the latest ${r.h.length - trimmed} of ${r.h.length} inspections so it stays scannable.</p>` : ''}
+    <div class="linkbox">${esc(url)}</div>`;
+            $('#dlsvg').onclick = () => download(new Blob([svg.replace('<svg ', '<svg xmlns:xlink="http://www.w3.org/1999/xlink" ')], { type: 'image/svg+xml' }), `${r.id}.svg`);
+            $('#dlpng').onclick = () => {
+                const img = new Image();
+                img.onload = () => { const c = document.createElement('canvas'); c.width = c.height = 1600; c.getContext('2d').drawImage(img, 0, 0, 1600, 1600); c.toBlob(b => download(b, `${r.id}.png`)); };
+                img.src = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+            };
+            $('#copy').onclick = async e => { try { await navigator.clipboard.writeText(url); e.target.textContent = 'Copied'; } catch { prompt('Copy this link', url); } };
+        }
+        function download(blob, name) {
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        }
+
+        /* ---------- inspector view (what the QR opens) ---------- */
+        async function renderVerify(payload) {
+            let o;
+            try { o = await unpack(payload); } catch { o = null; }
+            if (!o || !o.h || !o.h.length) {
+                $('#app').innerHTML = `<div class="card"><h1>This badge link can't be read</h1><p class="sub">The link may be cut off. Scan the QR code again or ask the technician for a new link.</p><a class="btn" href="#/">Issue a badge</a></div>`;
+                return;
+            }
+            const hist = o.h.map(([d, g, j]) => ({ d, g, j })), last = hist[hist.length - 1], G = GRADES[last.g] || GRADES.F;
+            const age = Math.floor((Date.now() - parseD(last.d)) / 864e5), expired = age > VALID_DAYS;
+            const tone = expired ? 'warn' : G.tone;
+            const label = expired ? 'Expired. Re-inspection due' : G.head === 'CERTIFIED' ? 'Certified' : G.head === 'CONDITIONAL' ? 'Conditional certification' : 'Not certified';
+            const svg = badgeSVG(last.g, o.i, makeQR(location.href));
+            $('#app').innerHTML = `
+  <div class="status ${tone}"><b>${label}</b>Grade ${esc(last.g)} (${esc(G.name)}), inspected ${fmtD(last.d)}. ${expired ? `That was ${age} days ago.` : `Valid through ${fmtD(new Date(parseD(last.d).getTime() + VALID_DAYS * 864e5).toLocaleDateString('en-CA'))}.`}</div>
+  <div class="grid">
+    <div>
+      <div class="card"><h2>Pest control provider</h2><dl>
+        <dt>Name</dt><dd>${esc(o.n)}</dd>
+        <dt>License #</dt><dd>${esc(o.l)}</dd>
+        <dt>Phone</dt><dd><a href="tel:${esc(String(o.p).replace(/[^\d+]/g, ''))}">${esc(fmtPhone(o.p))}</a></dd>
+        <dt>Certification ID</dt><dd>${esc(o.i)}</dd>
+        <dt>Inspected by</dt><dd>Triple E</dd></dl></div>
+      <div class="card">${svg}</div>
+    </div>
+    <div class="card"><h2>Inspection history</h2>
+      <ul class="tl">${hist.slice().reverse().map(x => {
+                const g = GRADES[x.g] || GRADES.F; return `
+        <li><span class="dot ${g.tone}"></span>
+          <div class="tl-head"><b>${fmtD(x.d)}</b><span class="chip ${g.tone}">${esc(x.g)}</span><small>${esc(g.name)}</small></div>
+          <p>${esc(x.j)}</p></li>`;
+            }).join('')}</ul>
+      ${o.t ? `<p class="note">Showing the latest ${hist.length} inspections. ${o.t} older record${o.t > 1 ? 's are' : ' is'} not included in this QR code.</p>` : ''}
+      <div class="actions"><a class="btn ghost" href="#/">Back to issuer</a></div>
+    </div>
+  </div>`;
+        }
+
+        /* ---------- router ---------- */
+        async function route() {
+            const h = location.hash;
+            window.scrollTo(0, 0);
+            if (h.startsWith('#/v/')) await renderVerify(h.slice(4)); else renderIssue();
+        }
+        addEventListener('hashchange', route);
+        route();
+    </script>
 </body>
 
 </html>
